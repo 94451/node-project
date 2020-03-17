@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="submit">Document</title>
+</head>
+
+<body>
+    用户名:<input type="text" id="user"> 密 码:<input type="text" id="pass">
+    <button id="btn">登录</button>
+    <script>
+        var XML = new XMLHttpRequest();
+        XML.open('post', 'http://localhost:1212', true);
+        XML.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); //告诉后台传的什么类型数据，用什么解析
+        XML.send('user=nini&pass=123456');
+
+        //XML.onload = function(){}//可换用
+        XML.onreadystatechange = function() {
+            if (XML.readyState == 4) {
+                if (XML.status >= 200 && XML.status < 300 || XML.status == 304) {
+                    console.log(XML.responseText);
+                } else {
+
+                }
+            }
+        };
+    </script>
+</body>
+
+</html>

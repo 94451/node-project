@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="submit">Document</title>
+</head>
+
+<body>
+    用户名:<input type="text" id="user"> 密 码:<input type="text" id="pass">
+    <button id="btn">登录</button>
+    <script>
+        /*
+         **ajax的GET用法
+         **
+         */
+        btn.onclick = function() {
+            ajax({
+                url: 'http://localhost:1212',
+                type: 'get',
+                data: {
+                    user: user.value,
+                    pass: pass.value
+                },
+                seccuss: function(data) {
+                    if (data == '登录成功') {
+                        document.body.style.background = 'red';
+                    } else {
+                        alert('登录失败');
+                    }
+                    //console.log(data);
+                },
+                error: function() {
+                    console.log('服务器错误');
+                }
+            });
+        }
+
+        function ajax(option) {
+
+            var ajax = new XMLHttpRequest();
+
+            ajax.open(option.type, option.url + '?' + jsonToString(option.data), true);
+            // ajax.open('get', 'http://localhost:1212/index.html', true);
+            ajax.send();
+            ajax.onreadystatechange = function() {
+                if (ajax.readyState == 4) {
+                    //console.log(ajax.status)
+                    if (ajax.status == 403 || (ajax.status >= 200 && ajax.status < 300)) {
+                        option.seccuss(ajax.responseText);
+                    } else {
+                        option.error();
+                    }
+                } else {
+
+                }
+            }
+
+            //console.log(option.data);
+            //{pass: "123456",user: "nini"}
+            // 将json转成String形式是user=nini$pass=123456
+            function jsonToString(json) {
+                var arr = [];
+                for (i in json) {
+                    //console.log(i + json[i]);
+                    arr.push(i + '=' + json[i]);
+                }
+                return arr.join('&')
+            }
+        }
+    </script>
+</body>
+
+</html>

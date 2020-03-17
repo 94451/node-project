@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="submit">Document</title>
+</head>
+
+<body>
+    用户名:<input type="text" id="user"> 密 码:<input type="text" id="pass">
+    <button id="btn">登录</button>
+    <script>
+        btn.onclick = function() {
+            ajax({
+                url: 'http://localhost:1212',
+                type: 'get',
+                data: {
+                    user: user.value,
+                    pass: pass.value
+                },
+                seccuss: function(data) {
+                    if (data == '登录成功') {
+                        document.body.style.background = 'red';
+                        alert('登录成功')
+                    } else {
+                        alert('登录失败');
+                    }
+                },
+                error: function() {
+                    console.log('服务器错误');
+                }
+            });
+        }
+
+        function ajax(option) {
+            var XML = new XMLHttpRequest();
+            if (option.type == 'post') {
+                XML.open('post', option.url, true);
+                XML.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); //告诉后台传的什么类型数据，用什么解析
+                XML.send(jsonToString(option.data));
+            } else if (option.type == 'get') {
+                XML.open('get', option.url + '?' + jsonToString(option.data), true);
+                XML.send();
+            }
+
+            XML.onreadystatechange = function() {
+                if (XML.readyState == 4) {
+                    if ((XML.status >= 200 && XML.status < 300) || XML.status == 304) {
+                        option.seccuss(XML.responseText);
+                        console.log(XML.responseText);
+                    } else {
+                        console.log(XML.responseText);
+                        option.error || option.error();
+                    };
+                };
+            };
+
+            function jsonToString(json) {
+                var arr = [];
+                for (i in json) {
+                    arr.push(i + '=' + json[i]);
+                }
+                return arr.join('&');
+            }
+        }
+    </script>
+</body>
+
+</html>

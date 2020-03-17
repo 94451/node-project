@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="submit">Document</title>
+</head>
+
+<body>
+    用户名:<input type="text" id="user"> 密 码:<input type="text" id="pass">
+    <button id="btn">登录</button>
+    <script>
+        btn.onclick = function() {
+            var ajax = new XMLHttpRequest();
+            ajax.open('get', 'http://localhost:1212?user=' + user.value + '&pass=' + pass.value, true);
+            // ajax.open('get', 'http://localhost:1212/index.html', true);
+            ajax.send();
+            ajax.onreadystatechange = function() {
+                if (ajax.readyState == 4) {
+                    //     console.log(ajax.status)
+                    if (ajax.status == 403 || (ajax.status >= 200 && ajax.status < 300)) {
+                        console.log(ajax.responseText);
+                    } else {
+                        console.log('服务器错误');
+                    }
+                } else {
+
+                }
+            }
+        }
+
+        // console.log(ajax.readyState); //ajax 的状态码
+        // setTimeout(function() {
+        //     console.log(ajax.readyState);
+        // }, 100)
+        // console.log(ajax.responseText); //后端返回的数据
+    </script>
+</body>
+
+</html>
